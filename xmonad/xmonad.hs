@@ -5,7 +5,10 @@ import           System.Exit
 import           XMonad
 import           XMonad.Util.SpawnOnce            (spawnOnce)
 
-import           XMonad.Hooks.Place
+import           XMonad.Layout.ResizableTile      (ResizableTall(..),
+                                                   MirrorResize(MirrorExpand,
+                                                                MirrorShrink)
+                                                  )
 import           XMonad.Layout.Mosaic             (Aspect (Reset), mosaic)
 import           XMonad.Layout.NoBorders          (noBorders)
 
@@ -13,7 +16,8 @@ import           XMonad.Actions.CopyWindow        (copy, copyToAll, kill1,
                                                    killAllOtherCopies,
                                                    wsContainingCopies)
 import           XMonad.Actions.CycleWS           (toggleWS')
-import           XMonad.Actions.DynamicWorkspaces (addHiddenWorkspace, removeEmptyWorkspaceAfterExcept,
+import           XMonad.Actions.DynamicWorkspaces (addHiddenWorkspace,
+                                                   removeEmptyWorkspaceAfterExcept,
                                                    renameWorkspace,
                                                    withWorkspace)
 import           XMonad.Actions.UpdatePointer     (updatePointer)
@@ -21,7 +25,7 @@ import           XMonad.Actions.Warp              (warpToScreen)
 import           XMonad.Hooks.DynamicLog          (PP (..), dynamicLog, shorten,
                                                    statusBar, wrap, xmobarColor,
                                                    xmobarPP)
-import           XMonad.Hooks.SetWMName
+import           XMonad.Hooks.SetWMName           (setWMName)
 import           XMonad.Prompt                    (XPConfig (..))
 import qualified XMonad.StackSet                  as W
 import           XMonad.Util.EZConfig             (additionalKeysP)
@@ -164,12 +168,20 @@ myAdditionaKeys
   , ("M4-S-k", windows W.swapUp)
     -- Rotate through the available layout algorithms
   , ("M4-f", sendMessage NextLayout)
-    -- Shrink the master area
+    -- Shrink the current area
   , ( "M4-h"
+    , do sendMessage MirrorShrink
+         sendMessage Reset)
+    -- Shrink the master area
+  , ( "M4-S-h"
     , do sendMessage Shrink
          sendMessage Reset)
-    -- Expand the master area
+    -- Expand the current area
   , ( "M4-l"
+    , do sendMessage MirrorExpand
+         sendMessage Reset)
+    -- Expand the master area
+  , ( "M4-S-l"
     , do sendMessage Expand
          sendMessage Reset)
     -- Toggle window tiling/floating
@@ -235,7 +247,19 @@ mouse XConfig {XMonad.modMask = modm} =
 -- Layouts
 --
 ------------------------------------------------------------------------
-myLayout = mosaic 1.25 [] ||| noBorders Full
+myLayout = resizeableTall ||| noBorders Full
+  where
+     -- ResizableTall is same as Tall but has resizable rightside window
+     resizeableTall = ResizableTall nmaster delta ratio []
+
+     -- The default number of windows in the master pane
+     nmaster = 1
+
+     -- Default proportion of screen occupied by master pane
+     ratio   = 1/2
+
+     -- Percent of screen to increment by when resizing panes
+     delta   = 3/100
 
 ------------------------------------------------------------------------
 -- Window rules:
