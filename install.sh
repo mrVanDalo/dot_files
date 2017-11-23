@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -x
+#set -x
 
 function symlink(){
     local source=$1
@@ -19,11 +19,12 @@ function symlink(){
     then
         rm -f ${source}
     fi
-
+  
+    echo "link ${source} -> ${target}"
     ln -s ${real_path}/${target} ${source}
 }
 
-symlink ~/.xprofile   x11/Xsession
+symlink ~/.xprofile   x11/Xprofile
 symlink ~/.Xresources x11/Xresources
 symlink ~/.Xdefaults  x11/Xdefaults
 symlink ~/.xmodmap    x11/Xmodmap
@@ -32,5 +33,6 @@ symlink ~/.spacemacs  spacemacs
 symlink ~/.xmonad     xmonad
 symlink ~/.irbrc      irbrc
 symlink ~/.xmobarrc   xmobarrc
+symlink ~/.wallpapers wallpapers
 
 

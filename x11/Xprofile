@@ -16,9 +16,7 @@ xset s off
 xrdb -merge ~/.Xresources
 xrdb -merge ~/.Xdefaults
 
-# start i3 
-#/usr/bin/i3
-
 # start xmonad
 rm -f ~/.xmonad/xmonad.state
-/usr/bin/xmonad
+
+#/usr/bin/xmonad

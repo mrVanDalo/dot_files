@@ -282,7 +282,8 @@ myLogHook = do
 startUp :: X ()
 startUp = do
   spawnOnce "xsetroot -cursor_name left_ptr"
-  spawnOnce "feh --randomize --bg-tile ~/.dot_i3/wallpapers/*"
+  -- set background
+  spawnOnce "feh --randomize --bg-tile ~/.wallpapers/*"
   -- java fix
   setWMName "LG3D"
 
