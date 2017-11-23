@@ -5,6 +5,7 @@ import           System.Exit
 import           XMonad
 import           XMonad.Util.SpawnOnce            (spawnOnce)
 
+import           XMonad.Hooks.Place
 import           XMonad.Layout.Mosaic             (Aspect (Reset), mosaic)
 import           XMonad.Layout.NoBorders          (noBorders)
 
@@ -78,6 +79,23 @@ selectNextScreen = do
     nextScreen current [] = W.screen current
     nextScreen _ (x:_)    = W.screen x
 
+isFloat :: Window -> X Bool
+isFloat w = gets windowset >>= \ws -> return (M.member w $ W.floating ws)
+
+-- todo : make this function readable
+toggleFloating :: W.RationalRect -> Window -> X()
+toggleFloating position w =
+  do floating <- isFloat w
+     call floating w
+  where
+    call floating =
+      if (floating)
+      then
+        windows . W.sink
+      else
+        windows . (\ord -> W.float ord position)
+
+
 myAdditionaKeys :: [(String, X ())]
 myAdditionaKeys
     -- ------------------------------------------------------------
@@ -99,7 +117,8 @@ myAdditionaKeys
     , do copies <- wsContainingCopies
          if not (null copies)
            then killAllOtherCopies
-           else windows copyToAll)
+           else windows copyToAll
+    )
     -- rename workspace but make sure myWorkspaces still exist
   , ( "M4-r"
     , do renameWorkspace myXPConfig
@@ -153,8 +172,8 @@ myAdditionaKeys
   , ( "M4-l"
     , do sendMessage Expand
          sendMessage Reset)
-    -- Push window back into tiling
-  , ("M4-t", withFocused $ windows . W.sink)
+    -- Toggle window tiling/floating
+  , ("M4-t", withFocused $ toggleFloating (W.RationalRect 0.65 0.65 0.35 0.35))
     -- Increment the number of windows in the master area
   , ("M4-,", sendMessage (IncMasterN 1))
     -- Deincrement the number of windows in the master area
