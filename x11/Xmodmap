@@ -1,0 +1,21 @@
+!
+! Swap Caps_Lock and Control_L
+!
+
+! replace capslock keys with Escape Keys
+remove Lock = Caps_Lock
+keysym Caps_Lock = Escape
+add Lock = Caps_Lock
+
+! Set Right function Key to Windows-key
+keycode 135 = Super_R NoSymbol Super_R NoSymbol Super_R
+
+! Map umlauts to RIGHT ALT + <key>
+keycode 108 = Mode_switch
+keysym e = e E EuroSign
+keysym c = c C cent
+keysym a = a A adiaeresis Adiaeresis
+keysym o = o O odiaeresis Odiaeresis
+keysym u = u U udiaeresis Udiaeresis
+keysym s = s S ssharp
+

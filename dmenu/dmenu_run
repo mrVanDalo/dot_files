@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+export PATH="~/.dmenu/bin:~/bin:$PATH"
+
+my_path=`dirname $0`
+
+`cat ${my_path}/list | dmenu -b -nf '#888888' -nb '#222222' -sf '#ffffff' -sb '#285577'`

@@ -1,0 +1,24 @@
+
+# no shitty pcspkr crap
+xset -b
+
+# load keyboard mappings
+xmodmap ~/.xmodmap
+
+# to allow sudo commands to access X
+xhost +
+
+# no sleeping monitor
+xset -dpms 
+xset s off
+
+# fix font size
+xrdb -merge ~/.Xresources
+xrdb -merge ~/.Xdefaults
+
+# start i3 
+#/usr/bin/i3
+
+# start xmonad
+rm -f ~/.xmonad/xmonad.state
+/usr/bin/xmonad

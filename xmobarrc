@@ -1,0 +1,68 @@
+-- -*- mode: haskell; -*-
+
+-- manual can be found here :
+-- http://projects.haskell.org/xmobar/#system-monitor-plugins
+
+Config {
+  font = "xft:inconsolata:pixelsize=18:antialias=true:hinting=true"
+  , borderColor = "black"
+  , border = TopB
+  , bgColor = "#002b36"  -- base03
+  , fgColor = "#839496"  -- base0
+  , allDesktops = True    -- show on all desktops
+  , position = TopW L 100
+  , commands = [
+      -- Weather code can be found here :
+      -- https://en.wikipedia.org/wiki/International_Civil_Aviation_Organization_airport_code
+      -- http://tgftp.nws.noaa.gov/weather/current/
+      -- "EDDT" : Berlin
+      Run Weather "SCSN" [ "--template","<tempC>C"
+                         , "--Low", "15"
+                         , "--High", "25"
+                         , "--normal", "#859900" --green
+                         , "--high",  "#dc322f" -- red
+                         , "--low", "lightblue"
+                         ] 3600
+      , Run Network "eth0" [ "--template", "<dev> <rx>KB <tx>KB"
+                           , "--Low", "0"
+                           , "--High", "32768" -- 32KB
+                           , "--normal", "#859900" --green
+                           , "--high",  "#dc322f" -- red
+                           ] 10
+      , Run Network "wlan0" [ "--template", "<dev> <rx>KB <tx>KB"
+                            , "--Low", "0"
+                            , "--High", "32768" -- 32KB
+                            , "--normal", "#859900" -- green
+                            , "--high",  "#dc322f" -- red
+                            ] 10
+      , Run Cpu [ "--template", "Cpu <total>%"
+                , "--Low","3"
+                , "--High","50"
+                , "--normal","#859900" --green
+                , "--high", "#dc322f" -- red
+                ] 10
+      , Run Battery [ "--template", "<acstatus> <left>% <timeleft>"
+                    , "--Low", "30"
+                    , "--High", "80"
+                    , "--low",  "#dc322f" -- red
+                    , "--normal", "#b58900" -- yellow
+                    , "--high", "#859900" -- green
+                    , "--"
+                    , "-o", "Charger"
+                    , "-i", "Charger"
+                    , "-O", "Battery"
+                    ] 300
+      , Run Memory  [ "--template", "Mem <usedratio>%"
+                    , "--Low", "30"
+                    , "--High", "70"
+                    , "--low", "#859900" -- green
+                    , "--normal", "#b58900" -- yellow
+                    , "--high",  "#dc322f" -- red
+                    ] 10
+      , Run Date     "%H:%M:%S %d.%m.%Y" "date" 10
+      , Run StdinReader
+      ]
+  , sepChar = "%"
+  , alignSep = "}{"
+  , template = "%StdinReader% }{ %battery% | %cpu% | %memory% | %eth0% %wlan0% | %date% | %EDDT% "
+  }
