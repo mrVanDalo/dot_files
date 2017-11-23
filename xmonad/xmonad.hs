@@ -1,23 +1,20 @@
 import qualified Data.Map                         as M
 import           Data.Monoid                      (All, Endo)
 import           Data.Ratio                       ((%))
+import           FloatKeys                        (keysResizeWindow)
 import           System.Exit
 import           XMonad
-import           XMonad.Util.SpawnOnce            (spawnOnce)
-
-import           XMonad.Layout.ResizableTile      (ResizableTall(..),
-                                                   MirrorResize(MirrorExpand,
-                                                                MirrorShrink)
-                                                  )
 import           XMonad.Layout.Mosaic             (Aspect (Reset), mosaic)
 import           XMonad.Layout.NoBorders          (noBorders)
+import           XMonad.Layout.ResizableTile      (MirrorResize (MirrorExpand, MirrorShrink),
+                                                   ResizableTall (..))
+import           XMonad.Util.SpawnOnce            (spawnOnce)
 
 import           XMonad.Actions.CopyWindow        (copy, copyToAll, kill1,
                                                    killAllOtherCopies,
                                                    wsContainingCopies)
 import           XMonad.Actions.CycleWS           (toggleWS')
-import           XMonad.Actions.DynamicWorkspaces (addHiddenWorkspace,
-                                                   removeEmptyWorkspaceAfterExcept,
+import           XMonad.Actions.DynamicWorkspaces (addHiddenWorkspace, removeEmptyWorkspaceAfterExcept,
                                                    renameWorkspace,
                                                    withWorkspace)
 import           XMonad.Actions.UpdatePointer     (updatePointer)
@@ -86,19 +83,20 @@ selectNextScreen = do
 isFloat :: Window -> X Bool
 isFloat w = gets windowset >>= \ws -> return (M.member w $ W.floating ws)
 
--- todo : make this function readable
-toggleFloating :: W.RationalRect -> Window -> X()
-toggleFloating position w =
-  do floating <- isFloat w
-     call floating w
-  where
-    call floating =
-      if (floating)
-      then
-        windows . W.sink
-      else
-        windows . (\ord -> W.float ord position)
+-- | add different shortcuts for different type
+-- of situation. Floating or Tiling
+floatTileCommand :: X () -> X () -> Window -> X ()
+floatTileCommand forFloating forTileing window = do
+  floating <- isFloat window
+  if floating
+    then forFloating
+    else forTileing
 
+toggleFloating :: W.RationalRect -> Window -> X ()
+toggleFloating position =
+  floatTileCommand
+    (withFocused (windows . W.sink))
+    (withFocused (windows . (`W.float` position)))
 
 myAdditionaKeys :: [(String, X ())]
 myAdditionaKeys
@@ -121,8 +119,7 @@ myAdditionaKeys
     , do copies <- wsContainingCopies
          if not (null copies)
            then killAllOtherCopies
-           else windows copyToAll
-    )
+           else windows copyToAll)
     -- rename workspace but make sure myWorkspaces still exist
   , ( "M4-r"
     , do renameWorkspace myXPConfig
@@ -169,21 +166,33 @@ myAdditionaKeys
     -- Rotate through the available layout algorithms
   , ("M4-f", sendMessage NextLayout)
     -- Shrink the current area
-  , ( "M4-h"
-    , do sendMessage MirrorShrink
-         sendMessage Reset)
     -- Shrink the master area
-  , ( "M4-S-h"
-    , do sendMessage Shrink
-         sendMessage Reset)
-    -- Expand the current area
-  , ( "M4-l"
-    , do sendMessage MirrorExpand
-         sendMessage Reset)
+  , ( "M4-h"
+    , withFocused $
+      floatTileCommand
+        (withFocused (keysResizeWindow (10, 0) (1, 1 % 2)))
+        (do sendMessage Shrink
+            sendMessage Reset))
     -- Expand the master area
+  , ( "M4-l"
+    , withFocused $
+      floatTileCommand
+        (withFocused (keysResizeWindow (-10, 0) (1, 1 % 2)))
+        (do sendMessage Expand
+            sendMessage Reset))
+    -- Expand the current area
   , ( "M4-S-l"
-    , do sendMessage Expand
-         sendMessage Reset)
+    , withFocused $
+      floatTileCommand
+        (withFocused (keysResizeWindow (0, -10) (1 % 2, 1)))
+        (do sendMessage MirrorExpand
+            sendMessage Reset))
+  , ( "M4-S-h"
+    , withFocused $
+      floatTileCommand
+        (withFocused (keysResizeWindow (0, 10) (1 % 2, 1)))
+        (do sendMessage MirrorShrink
+            sendMessage Reset))
     -- Toggle window tiling/floating
   , ("M4-t", withFocused $ toggleFloating (W.RationalRect 0.65 0.65 0.35 0.35))
     -- Increment the number of windows in the master area
@@ -248,18 +257,15 @@ mouse XConfig {XMonad.modMask = modm} =
 --
 ------------------------------------------------------------------------
 myLayout = resizeableTall ||| noBorders Full
-  where
      -- ResizableTall is same as Tall but has resizable rightside window
-     resizeableTall = ResizableTall nmaster delta ratio []
-
+  where
+    resizeableTall = ResizableTall nmaster delta ratio []
      -- The default number of windows in the master pane
-     nmaster = 1
-
+    nmaster = 1
      -- Default proportion of screen occupied by master pane
-     ratio   = 1/2
-
+    ratio = 1 / 2
      -- Percent of screen to increment by when resizing panes
-     delta   = 3/100
+    delta = 3 / 100
 
 ------------------------------------------------------------------------
 -- Window rules:
