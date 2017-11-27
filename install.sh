@@ -55,6 +55,7 @@ symlink ~/.xmonad     xmonad
 symlink ~/.irbrc      irbrc
 symlink ~/.xmobarrc   xmobarrc
 symlink ~/.wallpapers wallpapers
+symlink ~/.mplayer    mplayer
 
 install_spacemacs
 symlink ~/.spacemacs  spacemacs
