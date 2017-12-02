@@ -267,6 +267,9 @@ myLayout = resizeableTall ||| noBorders Full
      -- Percent of screen to increment by when resizing panes
     delta = 3 / 100
 
+-- workspaces names to be used only by one program, partly spawning on startup.
+autoSpawnWorkspaces = [ "-copyq", "audio" ]
+
 ------------------------------------------------------------------------
 -- Window rules:
 -- Execute arbitrary actions and WindowSet manipulations when managing
@@ -285,6 +288,8 @@ myManageHook :: Query (Endo WindowSet)
 myManageHook =
   composeAll
     [ className =? "Gimp" --> doFloat
+    , resource =? "copyq" --> doShift "-copyq"
+    , resource =? "audacious" --> doShift "audio"
     , resource =? "desktop_window" --> doIgnore
     , resource =? "kdesktop" --> doIgnore
     , scratchpadManageHook
@@ -321,6 +326,7 @@ myLogHook = do
     -- make sure the pointer always follows the focused window, when we use shortcuts
   updatePointer (0.5, 0.5) (0, 0)
 
+
 ------------------------------------------------------------------------
 -- Startup hook
 -- Perform an arbitrary action each time xmonad starts or is restarted
@@ -330,11 +336,15 @@ myLogHook = do
 -- By default, do nothing.
 startUp :: X ()
 startUp = do
-  spawnOnce "xsetroot -cursor_name left_ptr"
-  -- set background
-  spawnOnce "feh --randomize --bg-tile ~/.wallpapers/*"
   -- java fix
   setWMName "LG3D"
+  -- set cursor image
+  spawn "xsetroot -cursor_name left_ptr"
+  -- set background
+  -- todo : this sometimes does not work
+  spawn "feh --randomize --bg-tile ~/.wallpapers/*"
+  -- start copyq
+  spawnOnce "copyq"
 
 -- ------------------------------------------------------------
 --
@@ -380,7 +390,7 @@ defaults =
   -- mod3Mask ("right alt")
   -- mod4Mask ("windows key")
   , modMask = mod4Mask
-  , workspaces = myWorkspaces
+  , workspaces = myWorkspaces ++ autoSpawnWorkspaces
   , normalBorderColor = "#dddddd"
   , focusedBorderColor = "#ff0000"
   -- key bindings
