@@ -23,13 +23,13 @@ Config {
                          , "--high",  "#dc322f" -- red
                          , "--low", "lightblue"
                          ] 3600
-      , Run Network "eth0" [ "--template", "<dev> <rx>KB <tx>KB"
+      , Run Network "enp2s0f1" [ "--template", "<dev> <rx>KB <tx>KB"
                            , "--Low", "0"
                            , "--High", "32768" -- 32KB
                            , "--normal", "#859900" --green
                            , "--high",  "#dc322f" -- red
                            ] 10
-      , Run Network "wlan0" [ "--template", "<dev> <rx>KB <tx>KB"
+      , Run Network "wlp3s0" [ "--template", "<dev> <rx>KB <tx>KB"
                             , "--Low", "0"
                             , "--High", "32768" -- 32KB
                             , "--normal", "#859900" -- green
@@ -64,5 +64,5 @@ Config {
       ]
   , sepChar = "%"
   , alignSep = "}{"
-  , template = "%StdinReader% }{ %battery% | %cpu% | %memory% | %eth0% %wlan0% | %date% | %EDDT% "
+  , template = "%StdinReader% }{ %battery% | %cpu% | %memory% | %enp2s0f1% %wlp3s0% | %date% | %EDDT% "
   }
