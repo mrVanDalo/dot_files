@@ -1,0 +1,8 @@
+
+[Default Applications]
+text/html=browser-select.desktop
+x-scheme-handler/http=browser-select.desktop
+x-scheme-handler/https=browser-select.desktop
+x-scheme-handler/about=browser-select.desktop
+x-scheme-handler/mailto=thunderbird.desktop;
+x-scheme-handler/unknown=browser-select.desktop

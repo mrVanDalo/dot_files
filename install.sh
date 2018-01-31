@@ -56,6 +56,7 @@ symlink ~/.irbrc      irbrc
 symlink ~/.xmobarrc   xmobarrc
 symlink ~/.wallpapers wallpapers
 symlink ~/.mplayer    mplayer
+symlink ~/.config/mimeapps.list    mimeapps.list
 
 install_spacemacs
 symlink ~/.spacemacs  spacemacs

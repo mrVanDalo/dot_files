@@ -7,9 +7,9 @@
 !! Perl extensions
 !! ---------------
 URxvt.perl-ext-common:  default,matcher,font-size
+URxvt.url-launcher:     /run/current-system/sw/bin/browser-select
 URxvt.matcher.button:   1
-URxvt.urlLauncher:      browser-select
-URxvt.urgentOnBell:	    true
+URxvt.urgentOnBell:     true
 
 !! Font
 !! ----
@@ -21,12 +21,12 @@ URxvt.keysym.C-S-Down:  perl:font-size:decglobal
 URxvt.allow_bold:       true
 URxvt.xftAntialias:     true
 
-URxvt.font:             -*-terminus-medium-*-*-*-17-*-*-*-*-*-*-*, xft:inconsolata:pixelsize=18:antialias=true:hinting=true 
+URxvt.font:             -*-terminus-medium-*-*-*-17-*-*-*-*-*-*-*, xft:inconsolata:pixelsize=18:antialias=true:hinting=true
 URxvt.boldFont:         -*-terminus-bold-*-*-*-17-*-*-*-*-*-*-*,   xft:inconsolata:pixelsize=18:antialias=true:hinting=true
 URxvt.italicFont:       -*-terminus-medium-*-*-*-17-*-*-*-*-*-*-*, xft:inconsolata:pixelsize=18:antialias=true:hinting=true
 URxvt.bolditalicFont:   -*-terminus-bold-*-*-*-17-*-*-*-*-*-*-*,   xft:inconsolata:pixelsize=13:antialias=true:hinting=true
 
-!URxvt.font:             -*-gohu-medium-*-*-*-14-*-*-*-*-*-*-*, xft:inconsolata:pixelsize=18:antialias=true:hinting=true 
+!URxvt.font:             -*-gohu-medium-*-*-*-14-*-*-*-*-*-*-*, xft:inconsolata:pixelsize=18:antialias=true:hinting=true
 !URxvt.boldFont:         -*-gohu-bold-*-*-*-14-*-*-*-*-*-*-*,   xft:inconsolata:pixelsize=18:antialias=true:hinting=true
 !URxvt.italicFont:       -*-gohu-medium-*-*-*-14-*-*-*-*-*-*-*, xft:inconsolata:pixelsize=18:antialias=true:hinting=true
 !URxvt.bolditalicFont:   -*-gohu-bold-*-*-*-14-*-*-*-*-*-*-*,   xft:inconsolata:pixelsize=13:antialias=true:hinting=true
