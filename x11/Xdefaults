@@ -26,11 +26,6 @@ URxvt.boldFont:         -*-terminus-bold-*-*-*-17-*-*-*-*-*-*-*,   xft:inconsola
 URxvt.italicFont:       -*-terminus-medium-*-*-*-17-*-*-*-*-*-*-*, xft:inconsolata:pixelsize=18:antialias=true:hinting=true
 URxvt.bolditalicFont:   -*-terminus-bold-*-*-*-17-*-*-*-*-*-*-*,   xft:inconsolata:pixelsize=13:antialias=true:hinting=true
 
-!URxvt.font:             -*-gohu-medium-*-*-*-14-*-*-*-*-*-*-*, xft:inconsolata:pixelsize=18:antialias=true:hinting=true
-!URxvt.boldFont:         -*-gohu-bold-*-*-*-14-*-*-*-*-*-*-*,   xft:inconsolata:pixelsize=18:antialias=true:hinting=true
-!URxvt.italicFont:       -*-gohu-medium-*-*-*-14-*-*-*-*-*-*-*, xft:inconsolata:pixelsize=18:antialias=true:hinting=true
-!URxvt.bolditalicFont:   -*-gohu-bold-*-*-*-14-*-*-*-*-*-*-*,   xft:inconsolata:pixelsize=13:antialias=true:hinting=true
-
 !! Scrollbar
 !! ---------
 URxvt.scrollStyle:      rxvt
@@ -47,8 +42,8 @@ URxvt.saveLines:        1000000
 !! make sure unselected terminals are not graded out.
 URxvt.fading:           0
 
-!! Dont forget to load this file now 
-!! using 
+!! Dont forget to load this file now
+!! using
 !! > xrdb -merge ~/.Xdefaults
 !!
 !! To only apply colors to your terminal, for example, prefix
@@ -69,25 +64,25 @@ URxvt.fading:           0
 
 !! Dark
 !! ----
-#define S_base03                #002b36
-#define S_base02                #073642
-#define S_base01                #586e75
-#define S_base00                #657b83
-#define S_base0                 #839496
-#define S_base1                 #93a1a1
-#define S_base2                 #eee8d5
-#define S_base3                 #fdf6e3
+!#define S_base03                #002b36
+!#define S_base02                #073642
+!#define S_base01                #586e75
+!#define S_base00                #657b83
+!#define S_base0                 #839496
+!#define S_base1                 #93a1a1
+!#define S_base2                 #eee8d5
+!#define S_base3                 #fdf6e3
 
 !! Light
 !! ----
-!#define S_base03               #fdf6e3
-!#define S_base02               #eee8d5
-!#define S_base01               #93a1a1
-!#define S_base00               #839496
-!#define S_base0                #657b83
-!#define S_base1                #586e75
-!#define S_base2                #073642
-!#define S_base3                #002b36
+#define S_base03               #fdf6e3
+#define S_base02               #eee8d5
+#define S_base01               #93a1a1
+#define S_base00               #839496
+#define S_base0                #657b83
+#define S_base1                #586e75
+#define S_base2                #073642
+#define S_base3                #002b36
 
 URxvt*background:               S_base03
 URxvt*foreground:               S_base0
