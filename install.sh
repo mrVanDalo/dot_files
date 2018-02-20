@@ -47,8 +47,6 @@ function symlink(){
 }
 
 symlink ~/.xprofile   x11/Xprofile
-symlink ~/.Xresources x11/Xresources
-symlink ~/.Xdefaults  x11/Xdefaults
 symlink ~/.xmodmap    x11/Xmodmap
 symlink ~/.dmenu      dmenu
 symlink ~/.xmonad     xmonad

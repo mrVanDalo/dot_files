@@ -9,12 +9,8 @@ xmodmap ~/.xmodmap
 xhost +
 
 # no sleeping monitor
-xset -dpms 
+xset -dpms
 xset s off
-
-# fix font size
-xrdb -merge ~/.Xresources
-xrdb -merge ~/.Xdefaults
 
 # start xmonad
 rm -f ~/.xmonad/xmonad.state
