@@ -3,66 +3,43 @@
 -- manual can be found here :
 -- http://projects.haskell.org/xmobar/#system-monitor-plugins
 
+-- I use Nerdfonts, and powerliine fonts.
+-- They are chars that look like \xXXXX
+
 Config {
-  font = "xft:inconsolata:pixelsize=18:antialias=true:hinting=true"
+  -- font = "xft:inconsolata:pixelsize=18:antialias=true:hinting=true"
+  font = "xft:Inconsolata Nerd Font:pixelsize=17:antialias=true:hinting=true"
   , borderColor = "black"
-  , border = TopB
+  , border  = TopB
   , bgColor = "#002b36"  -- base03
   , fgColor = "#839496"  -- base0
-  , allDesktops = True    -- show on all desktops
+  , allDesktops = True   -- show on all desktops
   , position = TopW L 100
   , commands = [
       -- Weather code can be found here :
+      -- don't forget to move change the template when you change the station id
       -- https://en.wikipedia.org/wiki/International_Civil_Aviation_Organization_airport_code
       -- http://tgftp.nws.noaa.gov/weather/current/
       -- "EDDT" : Berlin
-      Run Weather "SCSN" [ "--template","<tempC>C"
-                         , "--Low", "15"
-                         , "--High", "25"
-                         , "--normal", "#859900" --green
-                         , "--high",  "#dc322f" -- red
-                         , "--low", "lightblue"
+      -- "WSSS" : Singapore
+      Run Weather "WSSS" [ "--template","\xe0bd  \xf2c7 <tempC>C "
                          ] 3600
-      , Run Network "enp2s0f1" [ "--template", "<dev> <rx>KB <tx>KB"
-                           , "--Low", "0"
-                           , "--High", "32768" -- 32KB
-                           , "--normal", "#859900" --green
-                           , "--high",  "#dc322f" -- red
-                           ] 10
-      , Run Network "wlp3s0" [ "--template", "<dev> <rx>KB <tx>KB"
-                            , "--Low", "0"
-                            , "--High", "32768" -- 32KB
-                            , "--normal", "#859900" -- green
-                            , "--high",  "#dc322f" -- red
-                            ] 10
-      , Run Cpu [ "--template", "Cpu <total>%"
-                , "--Low","3"
-                , "--High","50"
-                , "--normal","#859900" --green
-                , "--high", "#dc322f" -- red
-                ] 10
-      , Run Battery [ "--template", "<acstatus> <left>% <timeleft>"
-                    , "--Low", "30"
-                    , "--High", "80"
-                    , "--low",  "#dc322f" -- red
-                    , "--normal", "#b58900" -- yellow
-                    , "--high", "#859900" -- green
+      , Run Battery [ "--template", "<fc=#002b36,#859900>\xe0bc </fc><fc=#002b36,#859900> <acstatus> <left>% \xf017 <timeleft></fc>"
                     , "--"
-                    , "-o", "Charger"
-                    , "-i", "Charger"
-                    , "-O", "Battery"
-                    ] 300
-      , Run Memory  [ "--template", "Mem <usedratio>%"
-                    , "--Low", "30"
-                    , "--High", "70"
-                    , "--low", "#859900" -- green
-                    , "--normal", "#b58900" -- yellow
-                    , "--high",  "#dc322f" -- red
+                    , "-O", "\xf1e6"
+                    , "-i", "\xf1e6"
+                    , "-o", "\xf240"
+                    ] 60
+      , Run Cpu [ "--template", "<fc=#859900,#b58900>\xe0bc </fc><fc=#002b36,#b58900> \xf2db <total>%</fc>"
+                ] 10
+      , Run Memory  [ "--template", "<fc=#002b36,#b58900> \xf0a0 <usedratio>% </fc>"
                     ] 10
-      , Run Date     "%H:%M:%S %d.%m.%Y" "date" 10
+      , Run DynNetwork [ "--template", "<fc=#b58900,#268bd2>\xe0bc </fc><fc=#002b36,#268bd2> \xf1eb <dev> \xf0ab<rx>kb \xf0aa<tx>kb</fc>"
+                       ] 10
+      , Run Date     "<fc=#268bd2,#2aa198>\xe0bc </fc><fc=#002b36,#2aa198> \xf133 %d.%m.%Y </fc><fc=#2aa198,#859900>\xe0bc </fc><fc=#002b36,#859900> \xf017 %H:%M:%S </fc>" "date" 10
       , Run StdinReader
       ]
   , sepChar = "%"
   , alignSep = "}{"
-  , template = "%StdinReader% }{ %battery% | %cpu% | %memory% | %enp2s0f1% %wlp3s0% | %date% | %EDDT% "
+  , template = "%StdinReader% }{ %WSSS%%battery%%cpu%%memory%%dynnetwork%%date%"
   }
