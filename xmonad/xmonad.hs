@@ -354,12 +354,28 @@ startUp = do
 myXmobarPP :: PP
 myXmobarPP =
   xmobarPP
-  { ppCurrent = xmobarColor solarizedDefaultCyan "" . wrap "[" "]"
-  , ppUrgent = xmobarColor solarizedDefaultRed "" . wrap "!" ""
-  , ppHidden = xmobarColor solarizedDarkBase0 "" . wrap "" ""
-  , ppWsSep = " | "
-  , ppTitle = xmobarColor solarizedDefaultCyan "" . shorten 100
+  { ppCurrent = xmobarColor solarizedDarkBase03 solarizedDarkBase0 . wrap " " " " . mapWorkspaceToIcon
+  , ppHidden = xmobarColor solarizedDarkBase0 "" . wrap " " " " . mapWorkspaceToIcon
+  , ppUrgent = xmobarColor solarizedDefaultRed "" . wrap "!" "" . mapWorkspaceToIcon
+  , ppSep = " "
+  , ppLayout = xmobarColor solarizedDefaultYellow "" . mapLayoutToIcon
+  , ppWsSep = ""
+  , ppTitle = xmobarColor solarizedDefaultCyan "" . shorten 80
   }
+  where
+    mapWorkspaceToIcon f = case f of
+      "-copyq" -> "\xf0ea"
+      "audio" -> "\xf001"
+      "netflix" -> "\xfc44"
+      "mail" -> "\xfaee"
+      "chat" -> "\xf1d7"
+      "NSP" -> ""
+      _ -> f
+    mapLayoutToIcon f = case f of
+      "Full" -> "\xf2d0"
+      "ResizableTall" -> "\xf2d2"
+      _ -> f
+
 
 toggleStrutsKey :: XConfig t -> (KeyMask, KeySym)
 toggleStrutsKey XConfig {XMonad.modMask = modm} = (modm, xK_equal)

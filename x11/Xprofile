@@ -15,4 +15,4 @@ xset s off
 # start xmonad
 rm -f ~/.xmonad/xmonad.state
 
-#/usr/bin/xmonad
+~/.screenlayout/home.sh
