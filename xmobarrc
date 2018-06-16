@@ -22,7 +22,7 @@ Config {
       -- http://tgftp.nws.noaa.gov/weather/current/
       -- "EDDT" : Berlin
       -- "WSSS" : Singapore
-      Run Weather "WSSS" [ "--template","\xe0bd  \xf2c7 <tempC>C "
+      Run Weather "EDDT" [ "--template","\xe0bd  \xf2c7 <tempC>C "
                          ] 3600
       , Run Battery [ "--template", "<fc=#002b36,#859900>\xe0bc </fc><fc=#002b36,#859900> <acstatus> <left>% \xf017 <timeleft></fc>"
                     , "--"
@@ -41,5 +41,5 @@ Config {
       ]
   , sepChar = "%"
   , alignSep = "}{"
-  , template = "%StdinReader% }{ %WSSS%%battery%%cpu%%memory%%dynnetwork%%date%"
+  , template = "%StdinReader% }{ %EDDT%%battery%%cpu%%memory%%dynnetwork%%date%"
   }
