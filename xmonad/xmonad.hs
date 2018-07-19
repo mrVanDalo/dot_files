@@ -355,12 +355,12 @@ myXmobarPP :: PP
 myXmobarPP =
   xmobarPP
   { ppCurrent = xmobarColor solarizedDarkBase03 solarizedDarkBase0 . wrap " " " " . mapWorkspaceToIcon
-  , ppHidden = xmobarColor solarizedDarkBase0 "" . wrap " " " " . mapWorkspaceToIcon
-  , ppUrgent = xmobarColor solarizedDefaultRed "" . wrap "!" "" . mapWorkspaceToIcon
-  , ppSep = " "
-  , ppLayout = xmobarColor solarizedDefaultYellow "" . mapLayoutToIcon
-  , ppWsSep = ""
-  , ppTitle = xmobarColor solarizedDefaultCyan "" . shorten 80
+  , ppHidden  = xmobarColor solarizedDarkBase0 "" . wrap " " " " . mapWorkspaceToIcon
+  , ppUrgent  = xmobarColor solarizedDefaultRed "" . wrap "!" "" . mapWorkspaceToIcon
+  , ppSep     = " "
+  , ppLayout  = xmobarColor solarizedDefaultYellow "" . mapLayoutToIcon
+  , ppWsSep   = ""
+  , ppTitle   = xmobarColor solarizedDefaultCyan "" . shorten 80
   }
   where
     mapWorkspaceToIcon f = case f of
@@ -385,7 +385,7 @@ toggleStrutsKey XConfig {XMonad.modMask = modm} = (modm, xK_equal)
 -- Run xmonad with the settings you specify. No need to modify this.
 --
 main :: IO ()
-main = xmonad =<< statusBar "xmobar" myXmobarPP toggleStrutsKey defaults
+main = xmonad =<< statusBar "xmobar-configured" myXmobarPP toggleStrutsKey defaults
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will

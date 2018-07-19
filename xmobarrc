@@ -7,9 +7,7 @@
 -- They are chars that look like \xXXXX
 
 Config {
-  -- font = "xft:inconsolata:pixelsize=18:antialias=true:hinting=true"
-  font = "xft:Inconsolata Nerd Font:pixelsize=17:antialias=true:hinting=true"
-  , borderColor = "black"
+  borderColor = "black"
   , border  = TopB
   , bgColor = "#002b36"  -- base03
   , fgColor = "#839496"  -- base0
