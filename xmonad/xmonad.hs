@@ -39,6 +39,10 @@ import           XMonad.Util.Scratchpad           (scratchpadManageHook,
 myWorkspaces :: [String]
 myWorkspaces = ["1", "2", "3", "4"]
 
+-- theses workspaces should not be removed by the workspace
+-- switch commands
+nonRemovableWorkspaces = myWorkspaces ++ autoSpawnWorkspaces
+
 -- ------------------------------------------------------------
 --
 -- key definitions
@@ -55,7 +59,7 @@ myKeys XConfig {modMask = modm} =
     --
     -- mod-[1..9], Switch to workspace N
   [ ( (m .|. modm, k)
-    , removeEmptyWorkspaceAfterExcept myWorkspaces $ windows $ f i)
+    , removeEmptyWorkspaceAfterExcept nonRemovableWorkspaces $ windows $ f i)
   | (i, k) <- zip myWorkspaces [xK_1 .. xK_9]
   , (f, m) <- [(W.greedyView, 0)]
   ] ++
@@ -115,7 +119,7 @@ myAdditionaKeys
  =
   (multiKeys
      [ ( "`"
-       , removeEmptyWorkspaceAfterExcept myWorkspaces $
+       , removeEmptyWorkspaceAfterExcept nonRemovableWorkspaces $
          withWorkspace autoXPConfig (windows . W.greedyView))
     -- move focused window to workspace
      , ("S-<Space>", withWorkspace myXPConfig (windows . W.shift))
@@ -279,7 +283,7 @@ myLayout = resizeableTall ||| noBorders Full
     delta = 3 / 100
 
 -- workspaces names to be used only by one program, partly spawning on startup.
-autoSpawnWorkspaces = ["-copyq", "audio"]
+autoSpawnWorkspaces = ["-copyq", "audio", "mail", "chat"]
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -301,6 +305,11 @@ myManageHook =
     [ className =? "Gimp" --> doFloat
     , resource =? "copyq" --> doShift "-copyq"
     , resource =? "audacious" --> doShift "audio"
+    , resource =? "Thunderbird" --> doShift "mail"
+    , resource =? "Mail" --> doShift "mail"
+    , resource =? "Pidgin" --> doShift "chat"
+    , resource =? "Pidgin" --> doShift "chat"
+    , resource =? "slack" --> doShift "chat"
     , resource =? "desktop_window" --> doIgnore
     , resource =? "kdesktop" --> doIgnore
     , scratchpadManageHook
@@ -423,7 +432,7 @@ defaults =
   -- mod3Mask ("right alt")
   -- mod4Mask ("windows key")
     , modMask = mod4Mask
-    , workspaces = myWorkspaces ++ autoSpawnWorkspaces
+    , workspaces = nonRemovableWorkspaces
     , normalBorderColor = "#dddddd"
     , focusedBorderColor = "#ff0000"
   -- key bindings
