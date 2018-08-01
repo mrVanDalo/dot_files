@@ -98,6 +98,12 @@ toggleFloating position =
     (withFocused (windows . W.sink))
     (withFocused (windows . (`W.float` position)))
 
+multiKeys [] = []
+multiKeys ((key, command):xs) = (createMultiKey key command) ++ multiKeys xs
+  where
+    createMultiKey keyString command =
+      [("M4-" ++ keyString, command), ("M4-z " ++ keyString, command)]
+
 myAdditionaKeys :: [(String, X ())]
 myAdditionaKeys
     -- ------------------------------------------------------------
@@ -107,113 +113,118 @@ myAdditionaKeys
     -- ------------------------------------------------------------
     -- switch to workspace
  =
-  [ ( "M4-`"
-    , removeEmptyWorkspaceAfterExcept myWorkspaces $
-      withWorkspace autoXPConfig (windows . W.greedyView))
+  (multiKeys
+     [ ( "`"
+       , removeEmptyWorkspaceAfterExcept myWorkspaces $
+         withWorkspace autoXPConfig (windows . W.greedyView))
     -- move focused window to workspace
-  , ("M4-S-<Space>", withWorkspace myXPConfig (windows . W.shift))
+     , ("S-<Space>", withWorkspace myXPConfig (windows . W.shift))
     -- copy focused window to workspace
-  , ("M4-C-<Space>", withWorkspace myXPConfig (windows . copy))
+     , ("C-<Space>", withWorkspace myXPConfig (windows . copy))
     -- make windows "sticky" by copy and remove them to and from all other windows
-  , ( "M4-s"
-    , do copies <- wsContainingCopies
-         if not (null copies)
-           then killAllOtherCopies
-           else windows copyToAll)
+     , ( "s"
+       , do copies <- wsContainingCopies
+            if not (null copies)
+              then killAllOtherCopies
+              else windows copyToAll)
     -- rename workspace but make sure myWorkspaces still exist
-  , ( "M4-r"
-    , do renameWorkspace myXPConfig
-         sequence_ [addHiddenWorkspace ws | ws <- myWorkspaces])
-  , ("M4-<Esc>", toggleWS' ["NSP"])
-  ] ++
+     , ( "r"
+       , do renameWorkspace myXPConfig
+            sequence_ [addHiddenWorkspace ws | ws <- myWorkspaces])
+     , ("<Esc>", toggleWS' ["NSP"])
+     ]) ++
     -- ------------------------------------------------------------
     --
     -- launch applications
     --
     -- ------------------------------------------------------------
+  (multiKeys
     -- launch a terminal
-  [ ("M4-<Return>", spawn $ XMonad.terminal defaults)
+     [ ("<Return>", spawn $ XMonad.terminal defaults)
     -- launch dmenu
-  , ("M4-<Space>", spawn "~/.dmenu/dmenu_run")
+     , ("<Space>", spawn "~/.dmenu/dmenu_run")
     -- close focused window
     -- kills only a copy (not the window)
-  , ("M4-q", kill1)
+     , ("q", kill1)
     -- create screenshot
-  , ( "<Print>"
+    -- open scratchpad
+     , ("-", scratchpadSpawnAction defaults)
+     ]) ++
+  [ ( "<Print>"
     , spawn "maim --select --format=png /dev/shm/$(date +%F-%H%M%S).png")
     -- invert color for bright or dark days
   , ("<Pause>", spawn "xcalib -invert -alter")
-    -- open scratchpad
-  , ("M4--", scratchpadSpawnAction defaults)
   ] ++
     -- ------------------------------------------------------------
-    --
+  --
     -- Window and Layout
     --
     -- ------------------------------------------------------------
+  (multiKeys
     -- Move focus to the next window
-  [ ("M4-j", windows W.focusDown)
+     [ ("j", windows W.focusDown)
     -- Move focus to the previous window
-  , ("M4-k", windows W.focusUp)
+     , ("k", windows W.focusUp)
     -- Move focus to the master window
-  , ("M4-m", windows W.focusMaster)
+     , ("m", windows W.focusMaster)
     -- Swap the focused window and the master window
-  , ("M4-<Tab>", windows W.swapMaster)
+     , ("<Tab>", windows W.swapMaster)
     -- Swap the focused window with the next window
-  , ("M4-S-j", windows W.swapDown)
+     , ("S-j", windows W.swapDown)
     -- Swap the focused window with the previous window
-  , ("M4-S-k", windows W.swapUp)
+     , ("S-k", windows W.swapUp)
     -- Rotate through the available layout algorithms
-  , ("M4-f", sendMessage NextLayout)
+     , ("f", sendMessage NextLayout)
     -- Shrink the current area
     -- Shrink the master area
-  , ( "M4-h"
-    , withFocused $
-      floatTileCommand
-        (withFocused (keysResizeWindow (10, 0) (1, 1 % 2)))
-        (do sendMessage Shrink
-            sendMessage Reset))
+     , ( "h"
+       , withFocused $
+         floatTileCommand
+           (withFocused (keysResizeWindow (10, 0) (1, 1 % 2)))
+           (do sendMessage Shrink
+               sendMessage Reset))
     -- Expand the master area
-  , ( "M4-l"
-    , withFocused $
-      floatTileCommand
-        (withFocused (keysResizeWindow (-10, 0) (1, 1 % 2)))
-        (do sendMessage Expand
-            sendMessage Reset))
+     , ( "l"
+       , withFocused $
+         floatTileCommand
+           (withFocused (keysResizeWindow (-10, 0) (1, 1 % 2)))
+           (do sendMessage Expand
+               sendMessage Reset))
     -- Expand the current area
-  , ( "M4-S-l"
-    , withFocused $
-      floatTileCommand
-        (withFocused (keysResizeWindow (0, -10) (1 % 2, 1)))
-        (do sendMessage MirrorExpand
-            sendMessage Reset))
-  , ( "M4-S-h"
-    , withFocused $
-      floatTileCommand
-        (withFocused (keysResizeWindow (0, 10) (1 % 2, 1)))
-        (do sendMessage MirrorShrink
-            sendMessage Reset))
+     , ( "S-l"
+       , withFocused $
+         floatTileCommand
+           (withFocused (keysResizeWindow (0, -10) (1 % 2, 1)))
+           (do sendMessage MirrorExpand
+               sendMessage Reset))
+     , ( "S-h"
+       , withFocused $
+         floatTileCommand
+           (withFocused (keysResizeWindow (0, 10) (1 % 2, 1)))
+           (do sendMessage MirrorShrink
+               sendMessage Reset))
     -- Toggle window tiling/floating
-  , ("M4-t", withFocused $ toggleFloating (W.RationalRect 0.65 0.65 0.35 0.35))
+     , ("t", withFocused $ toggleFloating (W.RationalRect 0.65 0.65 0.35 0.35))
     -- Increment the number of windows in the master area
-  , ("M4-,", sendMessage (IncMasterN 1))
+     , (",", sendMessage (IncMasterN 1))
     -- Deincrement the number of windows in the master area
-  , ("M4-.", sendMessage (IncMasterN (-1)))
-  ] ++
+     , (".", sendMessage (IncMasterN (-1)))
+     ]) ++
     -- ------------------------------------------------------------
     --
     -- Xmonad Commands
     --
     -- ------------------------------------------------------------
     --  Quit xmonad
-  [ ("M4-S-q", io exitSuccess)
+  (multiKeys
+     [ ("S-q", io exitSuccess)
     --  restart xmonad
-  , ("M4-S-r", spawn "xmonad --recompile; xmonad --restart")
+     , ("S-r", spawn "xmonad --recompile; xmonad --restart")
     --  select next screen/monitor
-  , ("M4-<Backspace>", selectNextScreen)
+     , ("<Backspace>", selectNextScreen)
     --  move window next screen/monitor
     -- , ("M4-S-<Backspace>", moveWindowToNextScreen)
-  ] ++
+     ]) ++
     -- ------------------------------------------------------------
     --
     -- Volume Control
@@ -268,7 +279,7 @@ myLayout = resizeableTall ||| noBorders Full
     delta = 3 / 100
 
 -- workspaces names to be used only by one program, partly spawning on startup.
-autoSpawnWorkspaces = [ "-copyq", "audio" ]
+autoSpawnWorkspaces = ["-copyq", "audio"]
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -326,7 +337,6 @@ myLogHook = do
     -- make sure the pointer always follows the focused window, when we use shortcuts
   updatePointer (0.5, 0.5) (0, 0)
 
-
 ------------------------------------------------------------------------
 -- Startup hook
 -- Perform an arbitrary action each time xmonad starts or is restarted
@@ -335,8 +345,9 @@ myLogHook = do
 --
 -- By default, do nothing.
 startUp :: X ()
-startUp = do
+startUp
   -- java fix
+ = do
   setWMName "LG3D"
   -- set cursor image
   spawn "xsetroot -cursor_name left_ptr"
@@ -354,28 +365,33 @@ startUp = do
 myXmobarPP :: PP
 myXmobarPP =
   xmobarPP
-  { ppCurrent = xmobarColor solarizedDarkBase03 solarizedDarkBase0 . wrap " " " " . mapWorkspaceToIcon
-  , ppHidden  = xmobarColor solarizedDarkBase0 "" . wrap " " " " . mapWorkspaceToIcon
-  , ppUrgent  = xmobarColor solarizedDefaultRed "" . wrap "!" "" . mapWorkspaceToIcon
-  , ppSep     = " "
-  , ppLayout  = xmobarColor solarizedDefaultYellow "" . mapLayoutToIcon
-  , ppWsSep   = ""
-  , ppTitle   = xmobarColor solarizedDefaultCyan "" . shorten 80
-  }
+    { ppCurrent =
+        xmobarColor solarizedDarkBase03 solarizedDarkBase0 .
+        wrap " " " " . mapWorkspaceToIcon
+    , ppHidden =
+        xmobarColor solarizedDarkBase0 "" . wrap " " " " . mapWorkspaceToIcon
+    , ppUrgent =
+        xmobarColor solarizedDefaultRed "" . wrap "!" "" . mapWorkspaceToIcon
+    , ppSep = " "
+    , ppLayout = xmobarColor solarizedDefaultYellow "" . mapLayoutToIcon
+    , ppWsSep = ""
+    , ppTitle = xmobarColor solarizedDefaultCyan "" . shorten 80
+    }
   where
-    mapWorkspaceToIcon f = case f of
-      "-copyq" -> "\xf0ea"
-      "audio" -> "\xf001"
-      "netflix" -> "\xfc44"
-      "mail" -> "\xfaee"
-      "chat" -> "\xf1d7"
-      "NSP" -> ""
-      _ -> f
-    mapLayoutToIcon f = case f of
-      "Full" -> "\xf2d0"
-      "ResizableTall" -> "\xf2d2"
-      _ -> f
-
+    mapWorkspaceToIcon f =
+      case f of
+        "-copyq"  -> "\xf0ea"
+        "audio"   -> "\xf001"
+        "netflix" -> "\xfc44"
+        "mail"    -> "\xfaee"
+        "chat"    -> "\xf1d7"
+        "NSP"     -> ""
+        _         -> f
+    mapLayoutToIcon f =
+      case f of
+        "Full"          -> "\xf2d0"
+        "ResizableTall" -> "\xf2d2"
+        _               -> f
 
 toggleStrutsKey :: XConfig t -> (KeyMask, KeySym)
 toggleStrutsKey XConfig {XMonad.modMask = modm} = (modm, xK_equal)
@@ -385,7 +401,8 @@ toggleStrutsKey XConfig {XMonad.modMask = modm} = (modm, xK_equal)
 -- Run xmonad with the settings you specify. No need to modify this.
 --
 main :: IO ()
-main = xmonad =<< statusBar "xmobar-configured" myXmobarPP toggleStrutsKey defaults
+main =
+  xmonad =<< statusBar "xmobar-configured" myXmobarPP toggleStrutsKey defaults
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
@@ -395,30 +412,30 @@ main = xmonad =<< statusBar "xmobar-configured" myXmobarPP toggleStrutsKey defau
 --
 defaults =
   def
-  { terminal = "urxvt"
+    { terminal = "urxvt"
   -- Whether focus follows the mouse pointer.
-  , focusFollowsMouse = True
+    , focusFollowsMouse = True
   -- Whether clicking on a window to focus also passes the click to the window
-  , clickJustFocuses = False
-  , borderWidth = 1
+    , clickJustFocuses = False
+    , borderWidth = 1
   -- modMask lets you specify which modkey you want to use.
   -- mod1Mask ("left alt").
   -- mod3Mask ("right alt")
   -- mod4Mask ("windows key")
-  , modMask = mod4Mask
-  , workspaces = myWorkspaces ++ autoSpawnWorkspaces
-  , normalBorderColor = "#dddddd"
-  , focusedBorderColor = "#ff0000"
+    , modMask = mod4Mask
+    , workspaces = myWorkspaces ++ autoSpawnWorkspaces
+    , normalBorderColor = "#dddddd"
+    , focusedBorderColor = "#ff0000"
   -- key bindings
-  , keys = myKeys
-  , mouseBindings = mouse
+    , keys = myKeys
+    , mouseBindings = mouse
   -- hooks, layouts
-  , layoutHook = myLayout
-  , manageHook = myManageHook
-  , handleEventHook = myEventHook
-  , logHook = myLogHook
-  , startupHook = startUp
-  } `additionalKeysP`
+    , layoutHook = myLayout
+    , manageHook = myManageHook
+    , handleEventHook = myEventHook
+    , logHook = myLogHook
+    , startupHook = startUp
+    } `additionalKeysP`
   myAdditionaKeys
 
 autoXPConfig :: XPConfig
@@ -427,11 +444,11 @@ autoXPConfig = myXPConfig {autoComplete = Just 5000}
 myXPConfig :: XPConfig
 myXPConfig =
   def
-  { bgColor = solarizedDarkBase03
-  , fgColor = solarizedDarkBase0
-  , promptBorderWidth = 0
-  , font = "xft:inconsolata:pixelsize=18:antialias=true:hinting=true"
-  }
+    { bgColor = solarizedDarkBase03
+    , fgColor = solarizedDarkBase0
+    , promptBorderWidth = 0
+    , font = "xft:inconsolata:pixelsize=18:antialias=true:hinting=true"
+    }
 
 solarizedDarkBase0 :: String
 solarizedDarkBase0 = "#839496"
