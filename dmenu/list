@@ -1,6 +1,7 @@
 idea-ultimate
 filezilla
 steam
+krita
 browser-select
 passmenu --type
 xtrlock-pam
@@ -28,7 +29,10 @@ rubymine
 xterm
 slack
 easytag
+skype
+ghb
 transmission-remote-gtk
+vlc
 copyq
 openshot-qt
 pencil
@@ -37,7 +41,10 @@ VCVRack
 gpodder
 netflix
 pavucontrol-qt
+freemind
+scribus
 patchage
 zynaddsubfx
 mixxx
+fix-X
 pidgin
