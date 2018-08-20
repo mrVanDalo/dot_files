@@ -28,6 +28,9 @@ import qualified XMonad.StackSet                  as W
 import           XMonad.Util.EZConfig             (additionalKeysP)
 import           XMonad.Util.Scratchpad           (scratchpadManageHook,
                                                    scratchpadSpawnAction)
+import           XMonad.Hooks.UrgencyHook         (SpawnUrgencyHook(..),
+                                                   withUrgencyHook,
+                                                   BorderUrgencyHook(..))
 
 -- ------------------------------------------------------------
 --
@@ -380,7 +383,8 @@ myXmobarPP =
     , ppHidden =
         xmobarColor solarizedDarkBase0 "" . wrap " " " " . mapWorkspaceToIcon
     , ppUrgent =
-        xmobarColor solarizedDefaultRed "" . wrap "!" "" . mapWorkspaceToIcon
+        xmobarColor solarizedDarkBase03 solarizedDefaultRed .
+        wrap " " " " . mapWorkspaceToIcon
     , ppSep = " "
     , ppLayout = xmobarColor solarizedDefaultYellow "" . mapLayoutToIcon
     , ppWsSep = ""
@@ -410,8 +414,11 @@ toggleStrutsKey XConfig {XMonad.modMask = modm} = (modm, xK_equal)
 -- Run xmonad with the settings you specify. No need to modify this.
 --
 main :: IO ()
-main =
-  xmonad =<< statusBar "xmobar-configured" myXmobarPP toggleStrutsKey defaults
+main = do
+  configWithBar <- statusBar "xmobar-configured" myXmobarPP toggleStrutsKey defaults
+  xmonad $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ") configWithBar
+  -- xmonad $ withUrgencyHook ( BorderUrgencyHook { urgencyBorderColor = "#ff0000" } ) configWithBar
+
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
