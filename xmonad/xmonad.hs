@@ -428,7 +428,7 @@ main = do
 --
 defaults =
   def
-    { terminal = "urxvt"
+    { terminal = "xterm"
   -- Whether focus follows the mouse pointer.
     , focusFollowsMouse = True
   -- Whether clicking on a window to focus also passes the click to the window
