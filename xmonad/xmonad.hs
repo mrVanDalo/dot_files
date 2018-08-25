@@ -378,7 +378,10 @@ myXmobarPP :: PP
 myXmobarPP =
   xmobarPP
     { ppCurrent =
-        xmobarColor solarizedDarkBase03 solarizedDarkBase0 .
+        xmobarColor solarizedDarkBase0 solarizedDarkBase3 .
+        wrap " " " " . mapWorkspaceToIcon
+    , ppVisible =
+        xmobarColor solarizedDarkBase0 solarizedDarkBase01 .
         wrap " " " " . mapWorkspaceToIcon
     , ppHidden =
         xmobarColor solarizedDarkBase0 "" . wrap " " " " . mapWorkspaceToIcon
