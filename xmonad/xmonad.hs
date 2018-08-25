@@ -286,7 +286,7 @@ myLayout = resizeableTall ||| noBorders Full
     delta = 3 / 100
 
 -- workspaces names to be used only by one program, partly spawning on startup.
-autoSpawnWorkspaces = ["-copyq", "audio", "mail", "chat"]
+autoSpawnWorkspaces = ["-copyq", "audio", "mail", "chat", "slack", "pidgin" ]
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -310,9 +310,8 @@ myManageHook =
     , resource =? "audacious" --> doShift "audio"
     , resource =? "Thunderbird" --> doShift "mail"
     , resource =? "Mail" --> doShift "mail"
-    , resource =? "Pidgin" --> doShift "chat"
-    , resource =? "Pidgin" --> doShift "chat"
-    , resource =? "slack" --> doShift "chat"
+    , resource =? "Pidgin" --> doShift "pidgin"
+    , resource =? "slack" --> doShift "slack"
     , resource =? "desktop_window" --> doIgnore
     , resource =? "kdesktop" --> doIgnore
     , scratchpadManageHook
@@ -400,7 +399,13 @@ myXmobarPP =
         "audio"   -> "\xf001"
         "netflix" -> "\xfc44"
         "mail"    -> "\xfaee"
-        "chat"    -> "\xf1d7"
+        "chat"    -> "\xf860"
+        "pidgin"  -> "\xf70d"
+        "slack"   -> "\xf198"
+        "1"   -> "\xf8a3"
+        "2"   -> "\xf8a6"
+        "3"   -> "\xf8a9"
+        "4"   -> "\xf8ac"
         "NSP"     -> ""
         _         -> f
     mapLayoutToIcon f =
