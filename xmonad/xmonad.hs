@@ -373,6 +373,7 @@ startUp
 -- xmobar
 --
 -- ------------------------------------------------------------
+-- note : not used anymore
 myXmobarPP :: PP
 myXmobarPP =
   xmobarPP
@@ -423,8 +424,8 @@ toggleStrutsKey XConfig {XMonad.modMask = modm} = (modm, xK_equal)
 --
 main :: IO ()
 main = do
-  configWithBar <- statusBar "xmobar-configured" myXmobarPP toggleStrutsKey defaults
-  xmonad $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ") configWithBar
+  -- configWithBar <- statusBar "xmobar-configured" myXmobarPP toggleStrutsKey defaults
+  xmonad $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ") defaults
   -- xmonad $ withUrgencyHook ( BorderUrgencyHook { urgencyBorderColor = "#ff0000" } ) configWithBar
 
 
