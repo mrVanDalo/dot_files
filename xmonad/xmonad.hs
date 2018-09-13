@@ -32,6 +32,8 @@ import           XMonad.Hooks.UrgencyHook         (SpawnUrgencyHook(..),
                                                    withUrgencyHook,
                                                    BorderUrgencyHook(..))
 
+import           Solarized
+
 -- ------------------------------------------------------------
 --
 -- predefined workspaces
@@ -412,80 +414,9 @@ autoXPConfig = myXPConfig {autoComplete = Just 5000}
 myXPConfig :: XPConfig
 myXPConfig =
   def
-    { bgColor = solarizedDarkBase03
-    , fgColor = solarizedDarkBase0
+    { bgColor = Solarized.darkBase03
+    , fgColor = Solarized.darkBase0
     , promptBorderWidth = 0
     , font = "xft:inconsolata:pixelsize=18:antialias=true:hinting=true"
     }
 
-solarizedDarkBase0 :: String
-solarizedDarkBase0 = "#839496"
-
-solarizedDarkBase00 :: String
-solarizedDarkBase00 = "#657b83"
-
-solarizedDarkBase01 :: String
-solarizedDarkBase01 = "#586e75"
-
-solarizedDarkBase02 :: String
-solarizedDarkBase02 = "#073642"
-
-solarizedDarkBase03 :: String
-solarizedDarkBase03 = "#002b36"
-
-solarizedDarkBase1 :: String
-solarizedDarkBase1 = "#93a1a1"
-
-solarizedDarkBase2 :: String
-solarizedDarkBase2 = "#eee8d5"
-
-solarizedDarkBase3 :: String
-solarizedDarkBase3 = "#fdf6e3"
-
-solarizedDefaultBlue :: String
-solarizedDefaultBlue = "#268bd2"
-
-solarizedDefaultCyan :: String
-solarizedDefaultCyan = "#2aa198"
-
-solarizedDefaultGreen :: String
-solarizedDefaultGreen = "#859900"
-
-solarizedDefaultMagenta :: String
-solarizedDefaultMagenta = "#d33682"
-
-solarizedDefaultOrange :: String
-solarizedDefaultOrange = "#cb4b16"
-
-solarizedDefaultRed :: String
-solarizedDefaultRed = "#dc322f"
-
-solarizedDefaultViolet :: String
-solarizedDefaultViolet = "#6c71c4"
-
-solarizedDefaultYellow :: String
-solarizedDefaultYellow = "#b58900"
-
-solarizedLightBase0 :: String
-solarizedLightBase0 = "#657b83"
-
-solarizedLightBase00 :: String
-solarizedLightBase00 = "#839496"
-
-solarizedLightBase01 :: String
-solarizedLightBase01 = "#93a1a1"
-
-solarizedLightBase02 :: String
-solarizedLightBase02 = "#eee8d5"
-
-solarizedLightBase03 :: String
-solarizedLightBase03 = "#fdf6e3"
-
-solarizedLightBase1 :: String
-solarizedLightBase1 = "#586e75"
-
-solarizedLightBase2 :: String
-solarizedLightBase2 = "#073642"
-
-solarizedLightBase3 :: String
-solarizedLightBase3 = "#002b36"
