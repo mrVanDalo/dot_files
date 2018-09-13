@@ -42,6 +42,9 @@ import           XMonad.Hooks.UrgencyHook         (SpawnUrgencyHook(..),
 myWorkspaces :: [String]
 myWorkspaces = ["1", "2", "3", "4"]
 
+-- workspaces names to be used only by one program, partly spawning on startup.
+autoSpawnWorkspaces = [ "-copyq" ]
+
 -- theses workspaces should not be removed by the workspace
 -- switch commands
 nonRemovableWorkspaces = myWorkspaces ++ autoSpawnWorkspaces
@@ -285,8 +288,6 @@ myLayout = resizeableTall ||| noBorders Full
      -- Percent of screen to increment by when resizing panes
     delta = 3 / 100
 
--- workspaces names to be used only by one program, partly spawning on startup.
-autoSpawnWorkspaces = ["-copyq", "audio", "mail", "chat", "slack", "pidgin" ]
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -307,13 +308,6 @@ myManageHook =
   composeAll
     [ className =? "Gimp" --> doFloat
     , resource =? "copyq" --> doShift "-copyq"
-    , resource =? "audacious" --> doShift "audio"
-    , resource =? "Thunderbird" --> doShift "mail"
-    , resource =? "Mail" --> doShift "mail"
-    , resource =? "Pidgin" --> doShift "pidgin"
-    , resource =? "slack" --> doShift "slack"
-    , resource =? "desktop_window" --> doIgnore
-    , resource =? "kdesktop" --> doIgnore
     , scratchpadManageHook
         (W.RationalRect
           -- | percentage distance from left
@@ -368,55 +362,6 @@ startUp
   -- start copyq
   spawnOnce "copyq"
 
--- ------------------------------------------------------------
---
--- xmobar
---
--- ------------------------------------------------------------
--- note : not used anymore
-myXmobarPP :: PP
-myXmobarPP =
-  xmobarPP
-    { ppCurrent =
-        xmobarColor solarizedDarkBase0 solarizedDarkBase3 .
-        wrap " " " " . mapWorkspaceToIcon
-    , ppVisible =
-        xmobarColor solarizedDarkBase0 solarizedDarkBase01 .
-        wrap " " " " . mapWorkspaceToIcon
-    , ppHidden =
-        xmobarColor solarizedDarkBase0 "" . wrap " " " " . mapWorkspaceToIcon
-    , ppUrgent =
-        xmobarColor solarizedDarkBase03 solarizedDefaultRed .
-        wrap " " " " . mapWorkspaceToIcon
-    , ppSep = " "
-    , ppLayout = xmobarColor solarizedDefaultYellow "" . mapLayoutToIcon
-    , ppWsSep = ""
-    , ppTitle = xmobarColor solarizedDefaultCyan "" . shorten 80
-    }
-  where
-    mapWorkspaceToIcon f =
-      case f of
-        "-copyq"  -> "\xf0ea"
-        "audio"   -> "\xf001"
-        "netflix" -> "\xfc44"
-        "mail"    -> "\xfaee"
-        "chat"    -> "\xf860"
-        "pidgin"  -> "\xf70d"
-        "slack"   -> "\xf198"
-        "1"   -> "\xf8a3"
-        "2"   -> "\xf8a6"
-        "3"   -> "\xf8a9"
-        "4"   -> "\xf8ac"
-        "NSP"     -> ""
-        _         -> f
-    mapLayoutToIcon f =
-      case f of
-        "Full"          -> "\xf2d0"
-        "ResizableTall" -> "\xf2d2"
-        _               -> f
-
-toggleStrutsKey :: XConfig t -> (KeyMask, KeySym)
-toggleStrutsKey XConfig {XMonad.modMask = modm} = (modm, xK_equal)
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
@@ -424,9 +369,7 @@ toggleStrutsKey XConfig {XMonad.modMask = modm} = (modm, xK_equal)
 --
 main :: IO ()
 main = do
-  -- configWithBar <- statusBar "xmobar-configured" myXmobarPP toggleStrutsKey defaults
   xmonad $ withUrgencyHook (SpawnUrgencyHook "echo emit Urgency ") defaults
-  -- xmonad $ withUrgencyHook ( BorderUrgencyHook { urgencyBorderColor = "#ff0000" } ) configWithBar
 
 
 -- A structure containing your configuration settings, overriding
