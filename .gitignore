@@ -1,4 +1,11 @@
 
-xmonad/*
-!xmonad/*.hs
-!xmonad/lib/*.hs
+*.swp
+
+xmonad/history
+xmonad/prompt-history
+xmonad/*-linux
+xmonad/**/*.hi
+xmonad/**/*.hi
+xmonad/**/*.errors
+xmonad/**/*.o
+xmonad/*.state
