@@ -5,7 +5,7 @@ import           FloatKeys                        (keysResizeWindow)
 import           System.Exit
 import           XMonad
 import           XMonad.Layout.Mosaic             (Aspect (Reset), mosaic)
-import           XMonad.Layout.NoBorders          (noBorders)
+import           XMonad.Layout.NoBorders          (smartBorders, noBorders)
 import           XMonad.Layout.ResizableTile      (MirrorResize (MirrorExpand, MirrorShrink),
                                                    ResizableTall (..))
 import           XMonad.Util.SpawnOnce            (spawnOnce)
@@ -31,8 +31,10 @@ import           XMonad.Util.Scratchpad           (scratchpadManageHook,
 import           XMonad.Hooks.UrgencyHook         (SpawnUrgencyHook(..),
                                                    withUrgencyHook,
                                                    BorderUrgencyHook(..))
-
-import           Solarized
+import           XMonad.Layout.SubLayouts         (subTabbed, pullGroup, GroupMsg(UnMerge))
+import           XMonad.Layout.WindowNavigation   (windowNavigation)
+import           XMonad.Util.Types                (Direction2D(U,D,L,R))
+import qualified Solarized
 
 -- ------------------------------------------------------------
 --
@@ -76,6 +78,14 @@ myKeys XConfig {modMask = modm} =
   [ ((m .|. modm, k), windows $ f i)
   | (i, k) <- zip myWorkspaces [xK_1 .. xK_9]
   , (f, m) <- [(W.shift, shiftMask), (copy, controlMask)]
+  ] ++
+  -- layout stuff (todo move) (and maybe do it with the arrows)
+  [ ((modm .|. controlMask, xK_h), sendMessage $ pullGroup L)
+  , ((modm .|. controlMask, xK_l), sendMessage $ pullGroup R)
+  , ((modm .|. controlMask, xK_k), sendMessage $ pullGroup U)
+  , ((modm .|. controlMask, xK_j), sendMessage $ pullGroup D)
+
+  , ((modm .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
   ]
 
 -- ------------------------------------------------------------
@@ -279,7 +289,8 @@ mouse XConfig {XMonad.modMask = modm} =
 -- Layouts
 --
 ------------------------------------------------------------------------
-myLayout = resizeableTall ||| noBorders Full
+
+myLayout = windowNavigation $ subTabbed $ smartBorders resizeableTall ||| noBorders Full
      -- ResizableTall is same as Tall but has resizable rightside window
   where
     resizeableTall = ResizableTall nmaster delta ratio []
@@ -405,6 +416,7 @@ defaults =
     , handleEventHook = myEventHook
     , logHook = myLogHook
     , startupHook = startUp
+    -- tabbed config
     } `additionalKeysP`
   myAdditionaKeys
 
