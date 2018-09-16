@@ -31,10 +31,32 @@ import           XMonad.Util.Scratchpad           (scratchpadManageHook,
 import           XMonad.Hooks.UrgencyHook         (SpawnUrgencyHook(..),
                                                    withUrgencyHook,
                                                    BorderUrgencyHook(..))
-import           XMonad.Layout.SubLayouts         (subTabbed, pullGroup, GroupMsg(UnMerge))
-import           XMonad.Layout.WindowNavigation   (windowNavigation)
 import           XMonad.Util.Types                (Direction2D(U,D,L,R))
 import qualified Solarized
+
+
+import           XMonad.Layout.AutoMaster         (autoMaster)
+import           XMonad.Layout.Magnifier          (magnifiercz', magnifier') -- overlays the focused window a bit which is nice (except the master window)
+
+
+------------------------------------------------------------------------
+--
+-- Layouts
+--
+------------------------------------------------------------------------
+
+-- ResizableTall is same as Tall but has resizable rightside window
+myLayout = smartBorders (magnifier' (autoMaster 1 (1 / 100 ) resizeableTall)) ||| noBorders Full
+  where
+    resizeableTall = ResizableTall nmaster delta ratio []
+     -- The default number of windows in the master pane
+    nmaster = 1
+     -- Default proportion of screen occupied by master pane
+    ratio = 1 / 2
+     -- Percent of screen to increment by when resizing panes
+    delta = 3 / 100
+
+--- todo :
 
 -- ------------------------------------------------------------
 --
@@ -78,14 +100,6 @@ myKeys XConfig {modMask = modm} =
   [ ((m .|. modm, k), windows $ f i)
   | (i, k) <- zip myWorkspaces [xK_1 .. xK_9]
   , (f, m) <- [(W.shift, shiftMask), (copy, controlMask)]
-  ] ++
-  -- layout stuff (todo move) (and maybe do it with the arrows)
-  [ ((modm .|. controlMask, xK_h), sendMessage $ pullGroup L)
-  , ((modm .|. controlMask, xK_l), sendMessage $ pullGroup R)
-  , ((modm .|. controlMask, xK_k), sendMessage $ pullGroup U)
-  , ((modm .|. controlMask, xK_j), sendMessage $ pullGroup D)
-
-  , ((modm .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
   ]
 
 -- ------------------------------------------------------------
@@ -284,22 +298,6 @@ mouse XConfig {XMonad.modMask = modm} =
     -- you may also bind events to the mouse scroll wheel (button4 and button5)
     ]
 
-------------------------------------------------------------------------
---
--- Layouts
---
-------------------------------------------------------------------------
-
-myLayout = windowNavigation $ subTabbed $ smartBorders resizeableTall ||| noBorders Full
-     -- ResizableTall is same as Tall but has resizable rightside window
-  where
-    resizeableTall = ResizableTall nmaster delta ratio []
-     -- The default number of windows in the master pane
-    nmaster = 1
-     -- Default proportion of screen occupied by master pane
-    ratio = 1 / 2
-     -- Percent of screen to increment by when resizing panes
-    delta = 3 / 100
 
 
 ------------------------------------------------------------------------
