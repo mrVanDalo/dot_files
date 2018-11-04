@@ -46,7 +46,8 @@ import           XMonad.Layout.Magnifier          (magnifiercz', magnifier') -- 
 ------------------------------------------------------------------------
 
 -- ResizableTall is same as Tall but has resizable rightside window
-myLayout = smartBorders (magnifiercz' 1.21 resizeableTall) ||| noBorders Full
+-- myLayout = smartBorders (magnifiercz' 1.21 resizeableTall) ||| noBorders Full
+myLayout = smartBorders resizeableTall ||| noBorders Full
   where
     resizeableTall = ResizableTall nmaster delta ratio []
      -- The default number of windows in the master pane

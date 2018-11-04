@@ -55,6 +55,7 @@ symlink ~/.xmobarrc   xmobarrc
 symlink ~/.wallpapers wallpapers
 symlink ~/.mplayer    mplayer
 symlink ~/.config/mimeapps.list    mimeapps.list
+symlink ~/.config/Code/User/settings.json vscode/settings.json
 
 install_spacemacs
 symlink ~/.spacemacs  spacemacs
