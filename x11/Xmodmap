@@ -3,9 +3,12 @@
 !
 
 ! replace capslock keys with Escape Keys
+!remove ScrollLock = Caps_Lock
 remove Lock = Caps_Lock
 keysym Caps_Lock = Escape
-add Lock = Caps_Lock
+! add Lock = Caps_Lock
+add Lock = Scroll_Lock
+
 
 ! Set Right function Key to Windows-key
 keycode 135 = Super_R NoSymbol Super_R NoSymbol Super_R
