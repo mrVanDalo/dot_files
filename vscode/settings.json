@@ -2,6 +2,10 @@
     "keyboard.dispatch": "keyCode",
     "explorer.confirmDragAndDrop": false,
     "editor.tabSize": 2,
-    "window.zoomLevel": 0,
-    "git.enableSmartCommit": true
+    "window.zoomLevel": -1,
+    "git.enableSmartCommit": true,
+    "files.autoSave": "onFocusChange",
+    "terminal.integrated.setLocaleVariables": true,
+    "terminal.external.linuxExec": "xterm",
+    "explorer.confirmDelete": false
 }

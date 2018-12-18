@@ -3,11 +3,11 @@
 !
 
 ! replace capslock keys with Escape Keys
-!remove ScrollLock = Caps_Lock
-remove Lock = Caps_Lock
-keysym Caps_Lock = Escape
-! add Lock = Caps_Lock
+! remove Lock = Caps_Lock
+clear Lock
 add Lock = Scroll_Lock
+
+keysym Caps_Lock = Escape
 
 
 ! Set Right function Key to Windows-key

@@ -179,7 +179,8 @@ myAdditionaKeys
     -- launch a terminal
      [ ("<Return>", spawn $ XMonad.terminal defaults)
     -- launch dmenu
-     , ("<Space>", spawn "~/.dmenu/dmenu_run")
+    -- , ("<Space>", spawn "~/.dmenu/dmenu_run")
+     , ("<Space>", spawn "rofi -modi drun -show drun")
     -- close focused window
     -- kills only a copy (not the window)
      , ("q", kill1)
